@@ -106,10 +106,6 @@ class ModelPredictAPI(PredictAPI):
             abort(400, 'No face was detected in the image.')
 
         # store aligned input
-        for l in os.listdir(input_directory + '/align'):
-            print (l)
-        for l in os.listdir(input_directory + '/align/input'):
-            print (l)
         input_data = '/workspace/assets/input/align/input/input.png'
         #
         image_path = self.model_wrapper._predict(input_data, image_mask_type)
