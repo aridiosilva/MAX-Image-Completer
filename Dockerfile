@@ -39,7 +39,6 @@ RUN python openface/setup.py install
 RUN openface/models/get-models.sh
 
 COPY . /workspace
-RUN ls -Ral /workspace/assets
 
 EXPOSE 5000
 
