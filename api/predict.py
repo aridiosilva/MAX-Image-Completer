@@ -66,11 +66,9 @@ class ModelPredictAPI(PredictAPI):
         # creating directory for storing input
         input_directory = '/workspace/assets/input'
         if not os.path.exists(input_directory):
-            print("------- creating --------------")
             os.mkdir(input_directory)
         # clear input directory
-        input_folder = '/workspace/assets/input/'
-        for file in glob.glob(input_folder + '*'):
+        for file in glob.glob(input_directory + '/*'):
             try:
                 try:
                     os.remove(file)
