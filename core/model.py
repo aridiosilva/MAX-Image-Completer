@@ -1,6 +1,21 @@
+#
+# Copyright 2018-2019 IBM Corp. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 import tensorflow as tf
 import logging
-from PIL import Image
 from config import DEFAULT_MODEL_PATH, MODEL_META_DATA as model_meta
 from maxfw.model import MAXModelWrapper
 import os
@@ -46,7 +61,7 @@ class ModelWrapper(MAXModelWrapper):
         config.gpu_options.allow_growth = True
         
 
-    def predict(self, x, image_mask_type):
+    def _predict(self, model_data):
         
         checkpointDir = args["checkpointDir"]
         assert(os.path.exists(checkpointDir))
@@ -57,8 +72,8 @@ class ModelWrapper(MAXModelWrapper):
         with tf.Session(config=config) as sess:
             dcgan = DCGAN(sess, image_size=args["imgSize"],batch_size=1,
                           checkpoint_dir=checkpointDir, lam=0.1)
-            args["imgs"] = x
-            args["maskType"] = image_mask_type
+            args["imgs"] = model_data["input_data_dir"]
+            args["maskType"] = model_data["mask_type"]
           
             dcgan.complete(args)
 

@@ -1,3 +1,19 @@
+#
+# Copyright 2018-2019 IBM Corp. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 import os
 import io
 import glob
@@ -48,12 +64,11 @@ class ModelPredictAPI(PredictAPI):
         image_input_read = Image.open(args['file'])
         image_mask_type = args['mask_type']
         # creating directory for storing input
-        input_directory = '/workspace/assets/input/file'
+        input_directory = '/workspace/assets/input'
         if not os.path.exists(input_directory):
             os.mkdir(input_directory)
         # clear input directory
-        input_folder = '/workspace/assets/input/file/'
-        for file in glob.glob(input_folder + '*'):
+        for file in glob.glob(input_directory + '/*'):
             try:
                 try:
                     os.remove(file)
@@ -63,11 +78,11 @@ class ModelPredictAPI(PredictAPI):
                 continue
         # save input image
         image_input_read = image_input_read.convert('RGB')
-        image_input_read.save('/workspace/assets/input/file/input.jpg')
+        image_input_read.save('/workspace/assets/input/input.jpg')
         # face detection, alignment and resize using openface
         args = {
                'inputDir':input_directory,
-               'outputDir':'/workspace/assets/input/file/align',
+               'outputDir':'/workspace/assets/input/align',
                'landmarks':'innerEyesAndBottomLip',
                'dlibFacePredictor':'/workspace/openface/models/dlib/shape_predictor_68_face_landmarks.dat',
                'verbose':True,
@@ -89,9 +104,11 @@ class ModelPredictAPI(PredictAPI):
             abort(400, 'No face was detected in the image.')
 
         # store aligned input
-        input_data = '/workspace/assets/input/file/align/file/input.png'
+        input_data = '/workspace/assets/input/align/input/input.png'
         #
-        image_path = self.model_wrapper.predict(input_data, image_mask_type)
+        model_data = { "input_data_dir": input_data,
+                       "mask_type": image_mask_type}
+        image_path = self.model_wrapper.predict(model_data)
         """
         preparing image collage
         """

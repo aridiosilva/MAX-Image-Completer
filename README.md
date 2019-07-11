@@ -5,7 +5,7 @@
 This repository contains code to instantiate and deploy an image completer model. The goal is to fill in missing or
 corrupted parts of an image. This model uses Deep Convolutional Generative Adversarial Networks (DCGAN) to fill the missing regions in an image. The model is trained on the [celebA dataset](http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html) and works best for completing corrupted portions of a human face. Input to the model is an image containing a single corrupted face. The [OpenFace](https://github.com/cmusatyalab/openface) face recognition tool will detect and extract the corrupted face from the input image. This extracted face is then passed to the OpenFace alignment tool where it is aligned (inner eyes with bottom lip) and resized (64 x 64) producing an output that can be used by the model to fill the corrupted portions. The output is a collage of 20 images, in a 4x5 grid, representing the intermediate results and final completed image (bottom-right).
 
-The model is based on the [Tensorflow implementation of DCGAN](https://github.com/bamos/dcgan-completion.tensorflow). The model weights are hosted on [IBM Cloud Object Storage](https://max-assets.s3.us.cloud-object-storage.appdomain.cloud/image-completer/1.0/checkpoint.tar.gz). The code in this repository deploys the model as a web service in a Docker container. This repository was developed as part of the [IBM Developer Model Asset Exchange](https://developer.ibm.com/exchanges/models/).
+The model is based on the [Tensorflow implementation of DCGAN](https://github.com/bamos/dcgan-completion.tensorflow). The model weights are hosted on [IBM Cloud Object Storage](https://max-assets-prod.s3.us-south.cloud-object-storage.appdomain.cloud/max-image-completer/1.0.0/assets.tar.gz). The code in this repository deploys the model as a web service in a Docker container. This repository was developed as part of the [IBM Developer Model Asset Exchange](https://developer.ibm.com/exchanges/models/).
 
 _NOTE: Model takes about a minute to return the result._
 
@@ -28,7 +28,7 @@ _NOTE: Model takes about a minute to return the result._
 | Model Weights | [MIT](https://opensource.org/licenses/MIT) | [DCGAN completion Repository](https://github.com/bamos/dcgan-completion.tensorflow/blob/master/LICENSE) |
 | Model Code (3rd party) | [MIT](https://opensource.org/licenses/MIT) | [DCGAN completion Repository](https://github.com/bamos/dcgan-completion.tensorflow/blob/master/LICENSE) |
 | OpenFace | [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) | [OpenFace Repository](https://github.com/cmusatyalab/openface/blob/master/LICENSE) |
-| Test assets | Various | [Assets Readme](assets/README.md) |
+| Test assets | Various | [Assets Readme](samples/README.md) |
 
 ## Pre-requisites:
 
@@ -121,7 +121,7 @@ Response header `coordinates` indicates the coordinates (top-left + bottom-right
 You can also test it on the command line, for example:
 
 ```
-$ curl -F "file=@assets/input/test_image.jpg" -XPOST http://localhost:5000/model/predict?mask_type=left -o result.jpg
+$ curl -F "file=@samples/input/test_image.jpg" -XPOST http://localhost:5000/model/predict?mask_type=left -o result.jpg
 ```
 
 Available options for `mask_type` are `random`, `center`, `left` and `grid`.
