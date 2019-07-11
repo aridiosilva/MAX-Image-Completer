@@ -61,7 +61,7 @@ class ModelWrapper(MAXModelWrapper):
         config.gpu_options.allow_growth = True
         
 
-    def _predict(self, x, image_mask_type):
+    def _predict(self, model_data):
         
         checkpointDir = args["checkpointDir"]
         assert(os.path.exists(checkpointDir))
@@ -72,8 +72,8 @@ class ModelWrapper(MAXModelWrapper):
         with tf.Session(config=config) as sess:
             dcgan = DCGAN(sess, image_size=args["imgSize"],batch_size=1,
                           checkpoint_dir=checkpointDir, lam=0.1)
-            args["imgs"] = x
-            args["maskType"] = image_mask_type
+            args["imgs"] = model_data["input_data_dir"]
+            args["maskType"] = model_data["mask_type"]
           
             dcgan.complete(args)
 

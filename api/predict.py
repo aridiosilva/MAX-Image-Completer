@@ -106,7 +106,9 @@ class ModelPredictAPI(PredictAPI):
         # store aligned input
         input_data = '/workspace/assets/input/align/input/input.png'
         #
-        image_path = self.model_wrapper._predict(input_data, image_mask_type)
+        model_data = { "input_data_dir": input_data,
+                       "mask_type": image_mask_type}
+        image_path = self.model_wrapper.predict(model_data)
         """
         preparing image collage
         """
